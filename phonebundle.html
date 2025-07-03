@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Phone Bundle Store</title>
+  <title>Phone Delivery</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <style>
     /* Global Reset */
@@ -12,275 +12,123 @@
       padding: 0;
       font-family: 'Poppins', sans-serif;
       background-color: #f5f5f7;
-      color: #1c1c1e;
+      color: #212529;
       height: 100%;
       width: 100%;
       overflow: hidden;
     }
 
-    /* Centered container */
+    /* Container */
     .container {
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
       height: 100%;
-      padding: 15px;
-    }
-
-    /* Header */
-    .header {
-      font-size: 2.8rem;
-      font-weight: 600;
-      text-align: center;
-      color: #000;
-      margin-bottom: 20px;
-    }
-
-    /* Phone Grid */
-    .phone-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-      gap: 15px;
-      margin-bottom: 40px;
-      width: 100%;
-    }
-
-    /* Phone Card */
-    .phone-card {
-      background-color: #ffffff;
       padding: 20px;
-      border-radius: 15px;
-      width: 150px;
-      height: 200px;
-      text-align: center;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-      cursor: pointer;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      border: 3px solid transparent;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
     }
 
-    .phone-card.selected {
-      border-color: #0a84ff;
-    }
-
-    .phone-card:hover {
-      transform: scale(1.05);
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
-    }
-
-    .phone-img {
-      width: 100px;
-      height: 100px;
-      object-fit: contain;
-      margin-bottom: 10px;
-    }
-
-    .phone-title {
-      font-size: 1rem;
+    .header {
+      font-size: 2.5rem;
       font-weight: 600;
-      color: #333;
-    }
-
-    /* Confirm Button */
-    .confirm-btn {
-      padding: 15px 35px;
-      background-color: #0a84ff;
-      color: #fff;
-      border-radius: 25px;
-      border: none;
-      font-size: 1.2rem;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-      margin-top: 20px;
-    }
-
-    .confirm-btn:hover {
-      background-color: #007aff;
-    }
-
-    /* Modal Form */
-    .modal-bg {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(0, 0, 0, 0.6);
-      display: none;
-      justify-content: center;
-      align-items: center;
-      z-index: 100;
-    }
-
-    .form-modal {
-      background-color: #fff;
-      padding: 30px;
-      border-radius: 15px;
-      width: 80%;
-      max-width: 380px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-    }
-
-    .modal-title {
-      font-size: 1.5rem;
-      font-weight: bold;
+      color: #343a40;
       margin-bottom: 20px;
+      text-align: center;
     }
 
-    .modal-input {
-      width: 100%;
-      padding: 12px;
-      font-size: 1.1rem;
-      border-radius: 10px;
-      border: 2px solid #ddd;
-      margin-bottom: 15px;
-      outline: none;
-    }
-
-    .modal-input:focus {
-      border-color: #0a84ff;
-    }
-
-    .submit-btn {
-      padding: 15px;
-      background-color: #0a84ff;
-      color: white;
-      font-size: 1.1rem;
-      border-radius: 10px;
-      width: 100%;
-      cursor: pointer;
-      border: none;
-      transition: background-color 0.3s;
-    }
-
-    .submit-btn:hover {
-      background-color: #007aff;
-    }
-
-    /* Gift GIF */
-    .gif-container {
-      display: none;
+    /* Gift Animation */
+    .gift-container {
       width: 200px;
       height: 200px;
-      margin-top: 50px;
-      text-align: center;
+      background: url('https://i.ibb.co/k2sYw1Tb/03-39-03-19-512.webp') center/cover no-repeat;
+      border-radius: 15px;
       cursor: pointer;
+      position: relative;
+      transition: transform 0.3s ease;
     }
 
-    .gif-container img {
+    .gift-container.open {
+      transform: scale(1.1);
+    }
+
+    /* Phone Options */
+    .phone-options {
+      display: none;
+      position: absolute;
+      top: 220px;
       width: 100%;
-      height: 100%;
-      object-fit: contain;
+      text-align: center;
     }
 
-    /* Fireworks Animation */
-    #fireworks-canvas {
-      position: fixed;
+    .phone-option {
+      display: inline-block;
+      width: 150px;
+      height: 150px;
+      margin: 10px;
+      background-size: cover;
+      background-position: center;
+      cursor: pointer;
+      border-radius: 12px;
+      transition: transform 0.3s ease;
+    }
+
+    .phone-option:hover {
+      transform: scale(1.1);
+    }
+
+    /* Truck Animation */
+    .truck {
+      display: none;
+      position: absolute;
+      top: 50%;
+      left: -250px;
+      width: 150px;
+      height: 100px;
+      background: url('https://i.ibb.co/Q3VHx645/726455.png') center/cover no-repeat;
+      transition: left 4s ease-in-out;
+    }
+
+    /* Fireworks */
+    .fireworks-container {
+      display: none;
+      position: absolute;
       top: 0;
       left: 0;
       width: 100vw;
       height: 100vh;
-      z-index: 150;
-      display: none;
+      z-index: 200;
+      background: transparent;
     }
 
-    /* Success Message */
-    .centered-text {
+    @keyframes fireworks {
+      0% {
+        transform: scale(0);
+        opacity: 1;
+      }
+      50% {
+        transform: scale(1.5);
+        opacity: 0.7;
+      }
+      100% {
+        transform: scale(0);
+        opacity: 0;
+      }
+    }
+
+    .firework {
       position: absolute;
-      top: 30%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      color: #0a84ff;
-      font-size: 2.5rem;
-      font-weight: bold;
-      z-index: 250;
-      display: none;
+      width: 20px;
+      height: 20px;
+      background-color: #FFD700;
+      border-radius: 50%;
+      animation: fireworks 1s ease-out infinite;
     }
 
-    /* Modal Success Text */
-    .modal-text {
-      position: absolute;
-      top: 30%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      font-size: 2.5rem;
-      font-weight: bold;
-      color: #0a84ff;
-      z-index: 300;
-      background-color: white;
-      padding: 20px 30px;
-      border-radius: 10px;
-      display: none;
-    }
-
-    .modal-text span {
-      font-size: 3rem;
-      color: #ff9f00;
-    }
-
-    /* Mobile Adjustments */
+    /* Mobile Responsiveness */
     @media (max-width: 768px) {
-      .phone-card {
-        width: 130px;
-        height: 170px;
-        padding: 15px;
-      }
-
-      .phone-img {
-        width: 90px;
-        height: 90px;
-      }
-
-      .confirm-btn {
-        padding: 12px 30px;
-        font-size: 1rem;
-      }
-
-      .header {
-        font-size: 1.8rem;
-        margin-bottom: 15px;
-      }
-
-      .modal-title {
-        font-size: 1.3rem;
-      }
-
-      .modal-input {
-        font-size: 1rem;
-      }
-
-      .submit-btn {
-        font-size: 1rem;
-      }
-
-      .truck-img {
-        width: 180px;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .header {
-        font-size: 1.5rem;
-      }
-
-      .phone-title {
-        font-size: 0.9rem;
-      }
-
-      .confirm-btn {
-        font-size: 0.9rem;
-        padding: 8px 20px;
-      }
-
-      .truck-img {
-        width: 130px;
+      .gift-container {
+        width: 150px;
+        height: 150px;
       }
     }
   </style>
@@ -288,168 +136,87 @@
 <body>
 
   <div class="container">
-    <div class="header" id="chooseHeader">Choose Your Phone Bundle</div>
-    <div class="phone-grid" id="phoneGrid">
-      <!-- Phone cards will be dynamically added here -->
+    <div class="header">Choose Your Phone Bundle</div>
+    
+    <!-- Gift Box -->
+    <div class="gift-container" id="giftContainer">
+      <!-- Gift Box, will open after shake -->
     </div>
-    <button class="confirm-btn" id="confirmBtn" style="display: none;">Confirm Selection</button>
-  </div>
 
-  <!-- Modal for form submission -->
-  <div class="modal-bg" id="formModal">
-    <div class="form-modal">
-      <div class="modal-title">Enter Your Details</div>
-      <input type="text" id="nameInput" class="modal-input" placeholder="Your Name" required>
-      <input type="text" id="addressInput" class="modal-input" placeholder="Your Address" required>
-      
-      <!-- Memory Selector -->
-      <select class="memory-selector" id="memorySelect">
-        <option value="64GB">64GB</option>
-        <option value="128GB">128GB</option>
-        <option value="256GB">256GB</option>
-        <option value="512GB">512GB</option>
-      </select>
-      
-      <button class="submit-btn" id="submitBtn">Submit</button>
+    <!-- Phone Options -->
+    <div class="phone-options" id="phoneOptions">
+      <div class="phone-option" style="background-image: url('https://i.ibb.co/qF2CJM7m/Apple-IPhone-PNG-Photos-Transparent-Images.png');" data-phone="iPhone 13"></div>
+      <div class="phone-option" style="background-image: url('https://i.ibb.co/ywjVJXz/black-1.png');" data-phone="iPhone 14"></div>
+      <div class="phone-option" style="background-image: url('https://i.ibb.co/W4pnWrRn/samsung-galaxy-s10-ceramic-black-back-uzy.png');" data-phone="Samsung Galaxy S10"></div>
+      <div class="phone-option" style="background-image: url('https://i.ibb.co/Y76yHNzM/samsung-galaxy-s22-ultra.png');" data-phone="Samsung Galaxy S22"></div>
     </div>
-  </div>
 
-  <!-- Gift GIF -->
-  <div class="gif-container" id="gifContainer">
-    <img src="https://i.ibb.co/k2sYw1Tb/03-39-03-19-512.webp" alt="Gift Animation" id="giftGif" />
-  </div>
+    <!-- Truck Animation -->
+    <div class="truck" id="truck"></div>
 
-  <div class="centered-text" id="successMessage" style="display: none;">Phone and bundle sent!</div>
-  <div class="modal-text" id="modalText">
-    Phone and bundle sent! <span>🎉</span>
+    <!-- Fireworks Animation -->
+    <div class="fireworks-container" id="fireworksContainer"></div>
   </div>
-
-  <canvas id="fireworks-canvas"></canvas>
 
   <script>
-    const phones = [
-      { name: "iPhone 13", img: "https://i.ibb.co/qF2CJM7m/Apple-IPhone-PNG-Photos-Transparent-Images.png" },
-      { name: "iPhone 14", img: "https://i.ibb.co/ywjVJXz/black-1.png" },
-      { name: "Samsung Galaxy S10", img: "https://i.ibb.co/W4pnWrRn/samsung-galaxy-s10-ceramic-black-back-uzy.png" },
-      { name: "Samsung Galaxy S22", img: "https://i.ibb.co/Y76yHNzM/samsung-galaxy-s22-ultra.png" }
-    ];
+    const giftContainer = document.getElementById('giftContainer');
+    const phoneOptions = document.getElementById('phoneOptions');
+    const truck = document.getElementById('truck');
+    const fireworksContainer = document.getElementById('fireworksContainer');
+    let phonesSelected = null;
 
-    let selectedPhones = [];
+    // Shake detection
+    let shaking = false;
+    window.addEventListener('devicemotion', (event) => {
+      if (event.acceleration.x > 10 || event.acceleration.y > 10 || event.acceleration.z > 10) {
+        if (!shaking) {
+          shaking = true;
+          giftContainer.classList.add('open');
+          setTimeout(() => {
+            phoneOptions.style.display = 'block'; // Show phone options
+          }, 1000);
+        }
+      } else {
+        shaking = false;
+      }
+    });
 
-    const phoneGrid = document.getElementById('phoneGrid');
-    const confirmBtn = document.getElementById('confirmBtn');
-    const formModal = document.getElementById('formModal');
-    const submitBtn = document.getElementById('submitBtn');
-    const gifContainer = document.getElementById('gifContainer');
-    const giftGif = document.getElementById('giftGif');
-    const successMessage = document.getElementById('successMessage');
-    const chooseHeader = document.getElementById('chooseHeader');
-    const fireworksCanvas = document.getElementById('fireworks-canvas');
-    const ctx = fireworksCanvas.getContext('2d');
-    const modalText = document.getElementById('modalText');
-
-    function renderPhones() {
-      phoneGrid.innerHTML = '';
-      phones.forEach((phone, index) => {
-        const card = document.createElement('div');
-        card.classList.add('phone-card');
-        card.innerHTML = `
-          <img class="phone-img" src="${phone.img}" alt="${phone.name}" />
-          <div class="phone-title">${phone.name}</div>
-          <img class="sim-icon" src="https://i.ibb.co/MkJd0m4Y/pngtree-sim-card-png-image-6059385.png" alt="Sim Card" />
-        `;
-        card.addEventListener('click', () => {
-          if (selectedPhones.includes(index)) {
-            selectedPhones = selectedPhones.filter(i => i !== index);
-            card.classList.remove('selected');
-          } else {
-            if (selectedPhones.length < 2) {
-              selectedPhones.push(index);
-              card.classList.add('selected');
-            }
-          }
-
-          if (selectedPhones.length > 0) {
-            confirmBtn.style.display = 'block';
-          } else {
-            confirmBtn.style.display = 'none';
-          }
-        });
-
-        phoneGrid.appendChild(card);
+    // Phone selection
+    document.querySelectorAll('.phone-option').forEach(option => {
+      option.addEventListener('click', () => {
+        phonesSelected = option.dataset.phone;
+        phoneOptions.style.display = 'none';
+        showTruckAndFireworks();
       });
+    });
+
+    // Show truck and fireworks after phone is selected
+    function showTruckAndFireworks() {
+      // Show truck animation
+      truck.style.display = 'block';
+      setTimeout(() => {
+        truck.style.left = '100vw'; // Move truck across the screen
+      }, 500);
+
+      // Show fireworks
+      showFireworks();
     }
 
-    renderPhones();
+    // Fireworks
+    function showFireworks() {
+      fireworksContainer.style.display = 'block';
 
-    confirmBtn.addEventListener('click', () => {
-      confirmBtn.style.display = 'none';
-      openForm();
-    });
+      for (let i = 0; i < 50; i++) {
+        const firework = document.createElement('div');
+        firework.classList.add('firework');
+        firework.style.left = `${Math.random() * window.innerWidth}px`;
+        firework.style.top = `${Math.random() * window.innerHeight}px`;
+        fireworksContainer.appendChild(firework);
 
-    function openForm() {
-      formModal.style.display = 'flex';
-    }
-
-    submitBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      formModal.style.display = 'none';
-      gifContainer.style.display = 'block';
-    });
-
-    giftGif.addEventListener('click', () => {
-      gifContainer.style.display = 'none';
-      successMessage.style.display = 'block';
-      chooseHeader.style.display = 'none';
-      phoneGrid.style.display = 'none';
-      modalText.style.display = 'block';
-      startFireworks();
-    });
-
-    function startFireworks() {
-      fireworksCanvas.style.display = 'block';
-      let particles = [];
-      function spawnFirework() {
-        const colors = ["#FFD700", "#FF6347", "#32CD32", "#00FFFF", "#8A2BE2"];
-        const cx = Math.random() * fireworksCanvas.width;
-        const cy = Math.random() * fireworksCanvas.height;
-        const n = 18 + Math.random() * 14;
-        for (let j = 0; j < n; j++) {
-          const a = j * 2 * Math.PI / n;
-          const v = 3 + Math.random() * 2;
-          particles.push({
-            x: cx, y: cy,
-            dx: Math.cos(a) * v, dy: Math.sin(a) * v,
-            color: colors[Math.floor(Math.random() * colors.length)],
-            life: 44 + Math.random() * 19
-          });
-        }
+        setTimeout(() => {
+          firework.remove();
+        }, 1000);
       }
-
-      function fireworkDraw() {
-        ctx.clearRect(0, 0, fireworksCanvas.width, fireworksCanvas.height);
-        particles.forEach(p => {
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, 3 + Math.random() * 2, 0, 2 * Math.PI);
-          ctx.fillStyle = p.color;
-          ctx.shadowColor = p.color;
-          ctx.shadowBlur = 17;
-          ctx.fill();
-          ctx.shadowBlur = 0;
-          p.x += p.dx;
-          p.y += p.dy;
-          p.dy += 0.08;
-          p.life--;
-        });
-
-        particles = particles.filter(p => p.life > 0);
-        if (particles.length > 0) {
-          requestAnimationFrame(fireworkDraw);
-        }
-      }
-
-      setInterval(spawnFirework, 500); // Fireworks every half second
-      fireworkDraw();
     }
   </script>
 
