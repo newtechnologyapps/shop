@@ -18,7 +18,6 @@
       overflow: hidden;
     }
 
-    /* Container */
     .container {
       display: flex;
       flex-direction: column;
@@ -36,7 +35,16 @@
       text-align: center;
     }
 
-    /* Gift Animation */
+    /* Message to shake phone */
+    .shake-message {
+      font-size: 1.5rem;
+      color: #007bff;
+      text-align: center;
+      margin-bottom: 30px;
+      display: none;
+    }
+
+    /* Gift Box */
     .gift-container {
       width: 200px;
       height: 200px;
@@ -45,6 +53,7 @@
       cursor: pointer;
       position: relative;
       transition: transform 0.3s ease;
+      display: none;
     }
 
     .gift-container.open {
@@ -74,6 +83,40 @@
 
     .phone-option:hover {
       transform: scale(1.1);
+    }
+
+    /* Form Modal */
+    .form-modal {
+      display: none;
+      text-align: center;
+      position: absolute;
+      top: 220px;
+      width: 100%;
+      padding: 20px;
+    }
+
+    .modal-input {
+      width: 80%;
+      padding: 12px;
+      font-size: 1rem;
+      border-radius: 10px;
+      border: 2px solid #ddd;
+      margin-bottom: 15px;
+      outline: none;
+    }
+
+    .submit-btn {
+      padding: 12px 25px;
+      background-color: #28a745;
+      color: white;
+      font-size: 1rem;
+      border-radius: 10px;
+      cursor: pointer;
+      border: none;
+    }
+
+    .submit-btn:hover {
+      background-color: #218838;
     }
 
     /* Truck Animation */
@@ -136,12 +179,13 @@
 <body>
 
   <div class="container">
-    <div class="header">Choose Your Phone Bundle</div>
+    <div class="header" id="chooseHeader">Choose Your Phone Bundle</div>
     
+    <!-- Shake Message -->
+    <div class="shake-message" id="shakeMessage">Shake your phone to start!</div>
+
     <!-- Gift Box -->
-    <div class="gift-container" id="giftContainer">
-      <!-- Gift Box, will open after shake -->
-    </div>
+    <div class="gift-container" id="giftContainer"></div>
 
     <!-- Phone Options -->
     <div class="phone-options" id="phoneOptions">
@@ -149,6 +193,13 @@
       <div class="phone-option" style="background-image: url('https://i.ibb.co/ywjVJXz/black-1.png');" data-phone="iPhone 14"></div>
       <div class="phone-option" style="background-image: url('https://i.ibb.co/W4pnWrRn/samsung-galaxy-s10-ceramic-black-back-uzy.png');" data-phone="Samsung Galaxy S10"></div>
       <div class="phone-option" style="background-image: url('https://i.ibb.co/Y76yHNzM/samsung-galaxy-s22-ultra.png');" data-phone="Samsung Galaxy S22"></div>
+    </div>
+
+    <!-- Form Modal -->
+    <div class="form-modal" id="formModal">
+      <input type="text" id="nameInput" class="modal-input" placeholder="Your Name" required>
+      <input type="text" id="addressInput" class="modal-input" placeholder="Your Address" required>
+      <button class="submit-btn" id="submitBtn">Confirm</button>
     </div>
 
     <!-- Truck Animation -->
@@ -161,9 +212,15 @@
   <script>
     const giftContainer = document.getElementById('giftContainer');
     const phoneOptions = document.getElementById('phoneOptions');
+    const formModal = document.getElementById('formModal');
+    const submitBtn = document.getElementById('submitBtn');
     const truck = document.getElementById('truck');
     const fireworksContainer = document.getElementById('fireworksContainer');
+    const shakeMessage = document.getElementById('shakeMessage');
     let phonesSelected = null;
+
+    // Show shake message
+    shakeMessage.style.display = 'block';
 
     // Shake detection
     let shaking = false;
@@ -171,6 +228,8 @@
       if (event.acceleration.x > 10 || event.acceleration.y > 10 || event.acceleration.z > 10) {
         if (!shaking) {
           shaking = true;
+          shakeMessage.style.display = 'none'; // Hide shake message
+          giftContainer.style.display = 'block'; // Show gift
           giftContainer.classList.add('open');
           setTimeout(() => {
             phoneOptions.style.display = 'block'; // Show phone options
@@ -186,11 +245,22 @@
       option.addEventListener('click', () => {
         phonesSelected = option.dataset.phone;
         phoneOptions.style.display = 'none';
-        showTruckAndFireworks();
+        openForm();
       });
     });
 
-    // Show truck and fireworks after phone is selected
+    // Open form modal
+    function openForm() {
+      formModal.style.display = 'block';
+    }
+
+    // Handle form submission
+    submitBtn.addEventListener('click', () => {
+      formModal.style.display = 'none';
+      showTruckAndFireworks();
+    });
+
+    // Show truck and fireworks after form submission
     function showTruckAndFireworks() {
       // Show truck animation
       truck.style.display = 'block';
