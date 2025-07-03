@@ -35,12 +35,12 @@
       text-align: center;
     }
 
-    /* Message to shake phone */
+    /* Shake Message */
     .shake-message {
       font-size: 1.5rem;
       color: #007bff;
       text-align: center;
-      margin-bottom: 30px;
+      margin-top: 20px;
       display: none;
     }
 
@@ -244,19 +244,19 @@
     document.querySelectorAll('.phone-option').forEach(option => {
       option.addEventListener('click', () => {
         phonesSelected = option.dataset.phone;
-        phoneOptions.style.display = 'none';
+        phoneOptions.style.display = 'none'; // Hide phone options
         openForm();
       });
     });
 
     // Open form modal
     function openForm() {
-      formModal.style.display = 'block';
+      formModal.style.display = 'block'; // Show form modal
     }
 
     // Handle form submission
     submitBtn.addEventListener('click', () => {
-      formModal.style.display = 'none';
+      formModal.style.display = 'none'; // Hide form
       showTruckAndFireworks();
     });
 
