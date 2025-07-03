@@ -6,7 +6,6 @@
   <title>Phone Delivery</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <style>
-    /* Global Reset */
     body, html {
       margin: 0;
       padding: 0;
@@ -23,7 +22,7 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      height: 100%;
+      height: 100vh;
       padding: 20px;
       text-align: center;
     }
@@ -33,17 +32,17 @@
       font-weight: 600;
       color: #343a40;
       margin-bottom: 20px;
+      transition: opacity 0.5s;
     }
 
-    /* Shake message */
     .shake-message {
       font-size: 1.5rem;
       color: #007bff;
       display: block;
       margin-top: 20px;
+      transition: opacity 0.5s;
     }
 
-    /* Gift Box */
     .gift-container {
       width: 200px;
       height: 200px;
@@ -60,29 +59,50 @@
       transform: scale(1.1);
     }
 
+    /* Progress Bar */
+    #progressBarContainer {
+      display: block;
+      margin-bottom: 10px;
+      transition: opacity 0.5s;
+    }
+
+    #progressBar {
+      width: 300px;
+      margin-top: 20px;
+    }
+
+    #progressText {
+      font-size: 1.1rem;
+      margin: 0;
+    }
+
     /* Phone Options */
     .phone-options {
       display: none;
-      position: absolute;
-      top: 220px;
-      width: 100%;
+      width: 100vw;
       text-align: center;
+      position: absolute;
+      top: 35%;
+      left: 0;
     }
 
     .phone-option {
       display: inline-block;
-      width: 150px;
-      height: 150px;
-      margin: 10px;
-      background-size: cover;
+      width: 130px;
+      height: 130px;
+      margin: 12px 6px;
+      background-size: contain;
+      background-repeat: no-repeat;
       background-position: center;
       cursor: pointer;
-      border-radius: 12px;
-      transition: transform 0.3s ease;
+      border-radius: 18px;
+      box-shadow: 0 2px 10px #ccc;
+      transition: transform 0.2s;
+      vertical-align: middle;
+      background-color: #fff;
     }
-
     .phone-option:hover {
-      transform: scale(1.1);
+      transform: scale(1.08);
     }
 
     /* Form Modal */
@@ -90,19 +110,31 @@
       display: none;
       text-align: center;
       position: absolute;
-      top: 220px;
-      width: 100%;
-      padding: 20px;
+      top: 30%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 90vw;
+      max-width: 350px;
+      background: #fff;
+      border-radius: 14px;
+      box-shadow: 0 2px 20px #bbb;
+      padding: 24px 14px 18px 14px;
+      z-index: 20;
     }
 
     .modal-input {
-      width: 80%;
+      width: 88%;
       padding: 12px;
       font-size: 1rem;
       border-radius: 10px;
       border: 2px solid #ddd;
       margin-bottom: 15px;
       outline: none;
+      transition: border 0.2s;
+    }
+
+    .modal-input:focus {
+      border-color: #28a745;
     }
 
     .submit-btn {
@@ -113,6 +145,8 @@
       border-radius: 10px;
       cursor: pointer;
       border: none;
+      font-weight: 600;
+      margin-top: 10px;
     }
 
     .submit-btn:hover {
@@ -123,39 +157,31 @@
     .truck {
       display: none;
       position: absolute;
-      top: 50%;
-      left: -250px;
+      top: 55%;
+      left: -200px;
       width: 150px;
-      height: 100px;
-      background: url('https://i.ibb.co/Q3VHx645/726455.png') center/cover no-repeat;
-      transition: left 4s ease-in-out;
+      height: 90px;
+      background: url('https://i.ibb.co/Q3VHx645/726455.png') center/contain no-repeat;
+      transition: left 4s cubic-bezier(.54,.04,.37,1.52);
+      z-index: 22;
     }
 
     /* Fireworks */
     .fireworks-container {
       display: none;
-      position: absolute;
+      position: fixed;
       top: 0;
       left: 0;
       width: 100vw;
       height: 100vh;
       z-index: 200;
-      background: transparent;
+      pointer-events: none;
     }
 
     @keyframes fireworks {
-      0% {
-        transform: scale(0);
-        opacity: 1;
-      }
-      50% {
-        transform: scale(1.5);
-        opacity: 0.7;
-      }
-      100% {
-        transform: scale(0);
-        opacity: 0;
-      }
+      0% {transform: scale(0); opacity: 1;}
+      60% {transform: scale(1.5); opacity: 0.7;}
+      100% {transform: scale(0); opacity: 0;}
     }
 
     .firework {
@@ -164,32 +190,30 @@
       height: 20px;
       background-color: #FFD700;
       border-radius: 50%;
-      animation: fireworks 1s ease-out infinite;
+      animation: fireworks 1.2s linear;
+      pointer-events: none;
     }
 
-    /* Mobile Responsiveness */
     @media (max-width: 768px) {
-      .gift-container {
-        width: 150px;
-        height: 150px;
-      }
+      .container { padding: 10px;}
+      .header { font-size: 1.5rem;}
+      .gift-container { width: 120px; height: 120px;}
+      .phone-option { width: 88px; height: 88px;}
+      .form-modal { top: 24%; max-width: 95vw;}
+      #progressBar { width: 90vw;}
     }
   </style>
 </head>
 <body>
-
   <div class="container">
     <div class="header" id="chooseHeader">Choose Your Phone Bundle</div>
     
-    <!-- Shake Message -->
-    <div class="shake-message" id="shakeMessage">Shake your phone to start!</div>
-
-    <!-- Gift Box -->
     <div class="gift-container" id="giftContainer"></div>
 
-    <!-- Progress Bar -->
-    <div id="progressBarContainer" style="display: block;">
-      <progress id="progressBar" value="0" max="100" style="width: 300px; margin-top: 20px;"></progress>
+    <div class="shake-message" id="shakeMessage">Shake your phone to start!</div>
+
+    <div id="progressBarContainer">
+      <progress id="progressBar" value="0" max="100"></progress>
       <p id="progressText">0%</p>
     </div>
 
@@ -198,7 +222,7 @@
       <div class="phone-option" style="background-image: url('https://i.ibb.co/qF2CJM7m/Apple-IPhone-PNG-Photos-Transparent-Images.png');" data-phone="iPhone 13"></div>
       <div class="phone-option" style="background-image: url('https://i.ibb.co/ywjVJXz/black-1.png');" data-phone="iPhone 14"></div>
       <div class="phone-option" style="background-image: url('https://i.ibb.co/W4pnWrRn/samsung-galaxy-s10-ceramic-black-back-uzy.png');" data-phone="Samsung Galaxy S10"></div>
-      <div class="phone-option" style="background-image: url('https://i.ibb.co/Y76yHNzM/samsung-galaxy-s22-ultra.png');" data-phone="Samsung Galaxy S22"></div>
+      <div class="phone-option" style="background-image: url('https://i.ibb.co/FLDTY6Hq/Samsung-Galaxy-Transparent.png');" data-phone="Samsung Galaxy S24"></div>
     </div>
 
     <!-- Form Modal -->
@@ -215,12 +239,12 @@
 
     <!-- Truck Animation -->
     <div class="truck" id="truck"></div>
-
     <!-- Fireworks Animation -->
     <div class="fireworks-container" id="fireworksContainer"></div>
   </div>
 
   <script>
+    const chooseHeader = document.getElementById('chooseHeader');
     const giftContainer = document.getElementById('giftContainer');
     const phoneOptions = document.getElementById('phoneOptions');
     const formModal = document.getElementById('formModal');
@@ -230,12 +254,25 @@
     const shakeMessage = document.getElementById('shakeMessage');
     const progressBar = document.getElementById('progressBar');
     const progressText = document.getElementById('progressText');
-    const phoneOptionsDiv = document.getElementById('phoneOptions');
-    let phonesSelected = null;
+    const progressBarContainer = document.getElementById('progressBarContainer');
     let progress = 0;
+    let phonesSelected = null;
 
-    // Show shake message
-    shakeMessage.style.display = 'block';
+    // Стадія 1 — Початкова (подарунок, хедер, інструкція, прогрес)
+    function showInitial() {
+      chooseHeader.style.display = 'block';
+      giftContainer.style.display = 'block';
+      shakeMessage.style.display = 'block';
+      progressBarContainer.style.display = 'block';
+      progress = 0;
+      progressBar.value = 0;
+      progressText.textContent = '0%';
+      phoneOptions.style.display = 'none';
+      formModal.style.display = 'none';
+      truck.style.display = 'none';
+      fireworksContainer.style.display = 'none';
+    }
+    showInitial();
 
     // Shake detection
     let shaking = false;
@@ -250,12 +287,13 @@
 
           if (progress >= 100) {
             setTimeout(() => {
-              giftContainer.style.display = 'none'; // Hide gift
-              document.getElementById('chooseHeader').style.display = 'none'; // Hide header
-              document.getElementById('shakeMessage').style.display = 'none'; // Hide shake message
-              progressBar.style.display = 'none'; // Hide progress bar
-              phoneOptions.style.display = 'block'; // Show phone options after 100%
-            }, 1000);
+              // ЗНИКАЄ усе, що стосується етапу 1!
+              giftContainer.style.display = 'none';
+              chooseHeader.style.display = 'none';
+              shakeMessage.style.display = 'none';
+              progressBarContainer.style.display = 'none';
+              phoneOptions.style.display = 'block';
+            }, 800);
           }
         }
       } else {
@@ -267,51 +305,47 @@
     document.querySelectorAll('.phone-option').forEach(option => {
       option.addEventListener('click', () => {
         phonesSelected = option.dataset.phone;
-        phoneOptions.style.display = 'none'; // Hide phone options
+        phoneOptions.style.display = 'none';
         openForm();
       });
     });
 
     // Open form modal
     function openForm() {
-      formModal.style.display = 'block'; // Show form modal
+      formModal.style.display = 'block';
     }
 
     // Handle form submission
     submitBtn.addEventListener('click', () => {
-      formModal.style.display = 'none'; // Hide form
+      formModal.style.display = 'none';
       showTruckAndFireworks();
     });
 
     // Show truck and fireworks after form submission
     function showTruckAndFireworks() {
-      // Show truck animation
       truck.style.display = 'block';
+      truck.style.left = '-200px';
       setTimeout(() => {
-        truck.style.left = '100vw'; // Move truck across the screen
-      }, 500);
-
-      // Show fireworks
+        truck.style.left = '100vw';
+      }, 300);
       showFireworks();
     }
 
     // Fireworks
     function showFireworks() {
       fireworksContainer.style.display = 'block';
-
       for (let i = 0; i < 50; i++) {
         const firework = document.createElement('div');
         firework.classList.add('firework');
         firework.style.left = `${Math.random() * window.innerWidth}px`;
         firework.style.top = `${Math.random() * window.innerHeight}px`;
+        firework.style.background = `hsl(${Math.random()*360},90%,60%)`;
         fireworksContainer.appendChild(firework);
-
         setTimeout(() => {
           firework.remove();
-        }, 1000);
+        }, 1200);
       }
     }
   </script>
-
 </body>
 </html>
