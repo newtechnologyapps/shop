@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Phone Bundle Store</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100vw;
+      min-height: 100vh;
+      background: radial-gradient(ellipse at 50% 20%, #232d44 0%, #181a24 100%);
+      font-family: 'SF Pro Display', 'Segoe UI', Arial, sans-serif;
+      color: #222;
+      overflow-x: hidden;
+    }
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .container {
+      width: 100vw;
+      max-width: 450px;
+      margin: 0 auto;
+      min-height: 100vh;
+      padding-bottom: 120px;
+      box-sizing: border-box;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .search-bar {
+      display: flex;
+      align-items: center;
+      margin: 38px 0 25px 0;
+      width: 92vw;
+      max-width: 410px;
+      align-self: center;
+      position: relative;
+    }
+    .search-bar input {
+      width: 100%;
+      padding: 16px 22px;
+      border-radius: 16px;
+      border: none;
+      font-size: 1.15em;
+      background: #f8fafc;
+      outline: none;
+      letter-spacing: 0.5px;
+      font-weight: 500;
+      box-shadow: 0 1px 9px #08080810;
+    }
+    .search-bar button {
+      position: absolute;
+      right: 6px;
+      top: 7px;
+      background: #3577ff;
+      border: none;
+      border-radius: 10px;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: #fff;
+      font-size: 1.23em;
+      box-shadow: 0 1px 8px #3577ff16;
+      transition: background 0.15s;
+    }
+    .phone-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 32px 22px;
+      width: 100vw;
+      max-width: 410px;
+    }
+    .phone-card {
+      width: 160px;
+      height: 200px;
+      background: #fff;
+      border-radius: 22px;
+      box-shadow: 0 4px 28px #12143d15, 0 2px 7px #21212108;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+      cursor: pointer;
+      border: 3px solid transparent;
+      transition: border 0.18s, box-shadow 0.15s;
+      margin-bottom: 0px;
+      margin-top: 0px;
+      overflow: visible;
+      padding: 18px 10px 13px 10px;
+    }
+    .phone-card.selected {
+      border: 3px solid #3577ff;
+      box-shadow: 0 0 16px #1676f931, 0 4px 28px #12143d15;
+    }
+    .fav-heart {
+      position: absolute;
+      right: 15px; top: 15px;
+      width: 32px; height: 32px;
+      background: rgba(240,240,240,0.78);
+      border-radius: 50%;
+      box-shadow: 0 1.5px 7px #13258d18;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.38em;
+      color: #e5e5e7;
+      transition: color 0.16s, background 0.18s;
+      user-select: none;
+      z-index: 2;
+    }
+    .fav-heart.fav {
+      color: #ff2666;
+      background: #fff1f4;
+    }
+    .phone-img-block {
+      display: flex;
+      flex-direction: row;
+      align-items: flex-end;
+      justify-content: center;
+      width: 100%;
+      height: 108px;
+      margin-bottom: 13px;
+      margin-top: 7px;
+      gap: 9px;
+    }
+    .phone-img {
+      height: 100px;
+      width: auto;
+      object-fit: contain;
+      filter: drop-shadow(0 3px 8px #3637f02a);
+      background: none;
+      margin-right: 0;
+    }
+    .sim-icon {
+      width: 34px;
+      height: 26px;
+      object-fit: contain;
+      margin-left: -7px;
+      margin-bottom: 4px;
+      filter: drop-shadow(0 2px 8px #ffde30a2);
+      background: none;
+      opacity: 0.93;
+    }
+    .phone-title {
+      font-size: 1.08em;
+      font-weight: 500;
+      letter-spacing: 1px;
+      color: #131313;
+      margin-bottom: 8px;
+      margin-top: 0;
+      text-align: center;
+    }
+    .confirm-btn {
+      position: fixed;
+      left: 50%; transform: translateX(-50%);
+      bottom: 76px;
+      width: 92vw; max-width: 410px;
+      padding: 17px 0;
+      background: linear-gradient(90deg, #3577ff 0%, #0ee9a2 100%);
+      color: #fff;
+      font-size: 1.22em;
+      font-weight: bold;
+      border: none;
+      border-radius: 18px;
+      box-shadow: 0 2px 24px #1798c818, 0 0px 1px #fff;
+      cursor: pointer;
+      z-index: 33;
+      letter-spacing: 1.1px;
+      transition: background 0.17s, opacity 0.18s;
+      opacity: 0.97;
+      display: none;
+      outline: none;
+    }
+    .confirm-btn.active { display: block; }
+    /* Form Modal styles ... (як було) */
+    .form-modal-bg {
+      display: none;
+      position: fixed;
+      left: 0; top: 0;
+      width: 100vw; height: 100vh;
+      background: rgba(24, 29, 42, 0.92);
+      z-index: 60;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+    }
+    .form-modal {
+      background: #fff;
+      border-radius: 22px;
+      box-shadow: 0 8px 40px #0003;
+      padding: 36px 30px 25px 30px;
+      min-width: 260px;
+      max-width: 97vw;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      animation: modal-pop 0.2s;
+      position: relative;
+    }
+    @keyframes modal-pop {
+      0% {transform: scale(0.88);}
+      100% {transform: scale(1);}
+    }
+    .modal-title {
+      font-size: 1.32em;
+      font-weight: bold;
+      margin-bottom: 18px;
+      color: #13131a;
+      letter-spacing: 1px;
+    }
+    .modal-label {
+      font-size: 1.08em;
+      margin-top: 10px;
+      margin-bottom: 6px;
+      align-self: flex-start;
+      color: #13131a;
+      font-weight: 500;
+    }
+    .modal-input {
+      padding: 12px 16px;
+      border-radius: 9px;
+      border: 2px solid #3577ff;
+      font-size: 1.06em;
+      width: 220px;
+      margin-bottom: 7px;
+      outline: none;
+      transition: border 0.15s;
+      background: #f7fafd;
+      color: #15171d;
+    }
+    .modal-input:focus {
+      border: 2px solid #0ee9a2;
+    }
+    .modal-btn {
+      margin-top: 20px;
+      padding: 13px 60px;
+      border-radius: 12px;
+      border: none;
+      font-size: 1.16em;
+      font-weight: 600;
+      background: linear-gradient(90deg,#3577ff,#0ee9a2 90%);
+      color: #fff;
+      letter-spacing: 1.1px;
+      cursor: pointer;
+      box-shadow: 0 2px 18px #0ee9a247;
+      transition: background 0.13s;
+    }
+    .modal-btn:active {
+      background: linear-gradient(90deg,#0ee9a2,#3577ff 80%);
+    }
+    .modal-close {
+      position: absolute; right: 18px; top: 18px;
+      color: #aaa;
+      font-size: 1.5em;
+      background: none;
+      border: none;
+      cursor: pointer;
+      z-index: 3;
+    }
+    /* Truck and Firework — залишаємо, як було */
+    .truck-anim-bg {
+      display: none;
+      position: fixed;
+      left: 0; top: 0;
+      width: 100vw; height: 100vh;
+      background: rgba(8,18,20,0.88);
+      align-items: center;
+      justify-content: center;
+      z-index: 99;
+      flex-direction: column;
+      overflow: hidden;
+      pointer-events: none;
+    }
+    .truck-row {
+      width: 100vw;
+      height: 170px;
+      position: relative;
+      margin-top: 80px;
+      margin-bottom: 25px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: flex-start;
+      overflow: visible;
+    }
+    .truck-img {
+      position: absolute;
+      left: -180px;
+      width: 170px;
+      height: 105px;
+      object-fit: contain;
+      filter: drop-shadow(0 8px 22px #26a2ff33) drop-shadow(0 2px 5px #1fa2ff11);
+      animation: truck-move 2.6s cubic-bezier(.6,.16,.55,1.09);
+      z-index: 2;
+    }
+    @keyframes truck-move {
+      0% { left: -180px;}
+      70% { left: 38vw;}
+      100% { left: 115vw;}
+    }
+    .truck-label {
+      color: #fff;
+      font-size: 2em;
+      font-weight: bold;
+      margin-top: 12px;
+      letter-spacing: 1.6px;
+      text-align: center;
+      text-shadow: 0 2px 14px #00baffb7, 0 0 12px #fff;
+      margin-bottom: 22px;
+    }
+    #fireworks-canvas {
+      width: 100vw;
+      height: 100vh;
+      position: fixed;
+      left: 0; top: 0;
+      pointer-events: none;
+      z-index: 300;
+      display: none;
+    }
+    /* Bottom nav */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100vw;
+      max-width: 450px;
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      background: #f7fafd;
+      border-radius: 30px 30px 0 0;
+      box-shadow: 0 -2px 18px #14142522;
+      padding: 9px 0 12px 0;
+      z-index: 150;
+      font-size: 1.21em;
+      border-top: 2.3px solid #f5f5f5;
+      transition: bottom 0.13s;
+      margin: 0 auto;
+    }
+    .nav-btn {
+      color: #7a809a;
+      background: none;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+      font-size: 1.07em;
+      padding: 3px 2vw;
+      border-radius: 11px;
+      transition: background 0.12s, color 0.12s;
+    }
+    .nav-btn.active {
+      color: #3577ff;
+      background: #e8f5ff;
+    }
+    .nav-btn span {
+      font-size: 11px;
+      margin-top: 2px;
+      font-weight: 500;
+      letter-spacing: 0.1px;
+    }
+    @media (max-width: 600px) {
+      .container { max-width: 99vw; }
+      .phone-card { width: 44vw; height: 41vw; min-width: 134px; min-height: 150px; max-width: 168px; max-height: 220px;}
+      .bottom-nav { max-width: 100vw; }
+      .truck-row { margin-top: 30px;}
+      .form-modal { min-width: 80vw;}
+      .phone-img-block { height: 19vw; min-height: 70px;}
+      .sim-icon { width: 24px; height: 18px; }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="fireworks-canvas"></canvas>
+  <div class="container" id="mainApp">
+    <!-- Search -->
+    <div class="search-bar">
+      <input type="text" id="searchInput" placeholder="Search...">
+      <button id="searchBtn">&#128269;</button>
+    </div>
+    <!-- Phone grid -->
+    <div class="phone-grid" id="phoneGrid"></div>
+    <!-- Confirm Button -->
+    <button class="confirm-btn" id="confirmBtn">Confirm</button>
+  </div>
+  <!-- FORM MODAL -->
+  <div class="form-modal-bg" id="formModalBg">
+    <form class="form-modal" id="orderForm" autocomplete="off">
+      <button type="button" class="modal-close" id="closeForm">&times;</button>
+      <div class="modal-title">Order confirmation</div>
+      <label class="modal-label" for="nameInput">NAME</label>
+      <input class="modal-input" id="nameInput" type="text" maxlength="40" autocomplete="off" required>
+      <label class="modal-label" for="addressInput">ADDRESS</label>
+      <input class="modal-input" id="addressInput" type="text" maxlength="60" autocomplete="off" required>
+      <button class="modal-btn" type="submit">Send</button>
+    </form>
+  </div>
+  <!-- TRUCK ANIMATION -->
+  <div class="truck-anim-bg" id="truckAnimBg">
+    <div class="truck-row">
+      <img class="truck-img" id="truckImg" src="https://i.ibb.co/Q3VHx645/726455.png" alt="truck">
+    </div>
+    <div class="truck-label">Phone and bundle sent!</div>
+  </div>
+  <!-- Bottom Navigation -->
+  <div class="bottom-nav">
+    <button class="nav-btn active" id="navHome">
+      <svg width="27" height="27" fill="none"><path d="M5 10.5L13.5 4L22 10.5V21.5C22 22.0523 21.5523 22.5 21 22.5H7C6.44772 22.5 6 22.0523 6 21.5V10.5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><rect x="10" y="16" width="4" height="6" rx="1.2" fill="currentColor" opacity="0.14"/></svg>
+      <span>Home</span>
+    </button>
+    <button class="nav-btn" id="navFav">
+      <svg width="26" height="26" fill="none"><path d="M13 21.5L11.55 20.18C6.2 15.27 2.5 12.04 2.5 8.28C2.5 5.27 5.14 2.5 8.5 2.5C10.24 2.5 11.91 3.29 13 4.53C14.09 3.29 15.76 2.5 17.5 2.5C20.86 2.5 23.5 5.27 23.5 8.28C23.5 12.04 19.8 15.27 14.45 20.18L13 21.5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="currentColor" opacity="0.13"/></svg>
+      <span>Favorites</span>
+    </button>
+    <button class="nav-btn" id="navBell">
+      <svg width="27" height="27" fill="none"><path d="M17.25 18.5V11.5C17.25 9.15279 15.3472 7.25 13 7.25C10.6528 7.25 8.75 9.15279 8.75 11.5V18.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><rect x="9.75" y="20" width="6.5" height="2.5" rx="1.2" fill="currentColor" opacity="0.13"/></svg>
+      <span>Alerts</span>
+    </button>
+    <button class="nav-btn" id="navSettings">
+      <svg width="26" height="26" fill="none"><circle cx="13" cy="13" r="2.5" stroke="currentColor" stroke-width="2"/><path d="M18.06 19.94L19.94 18.06M6.06 19.94L4.18 18.06M19.94 6.06L18.06 4.18M4.18 6.06L6.06 4.18M13 1V3.5M13 22.5V25M23 13H25M1 13H3.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      <span>Settings</span>
+    </button>
+  </div>
+  <script>
+    // ==== PHONES DATA ====
+    const phones = [
+      // iPhones
+      { name: "iPhone 15 Pro Max", img: "https://i.ibb.co/qF2CJM7m/Apple-IPhone-PNG-Photos-Transparent-Images.png" },
+      { name: "iPhone 14 Pro", img: "https://i.ibb.co/ywjVJXz/black-1.png" },
+      { name: "iPhone 13", img: "https://i.ibb.co/0V2cBHMY/pngimg-com-iphone-13-PNG2.png" },
+      // Samsungs
+      { name: "Samsung S10", img: "https://i.ibb.co/W4pnWrRn/samsung-galaxy-s10-ceramic-black-back-uzy.png" },
+      { name: "Samsung S22 Ultra", img: "https://i.ibb.co/Y76yHNzM/samsung-galaxy-s22-ultra.png" },
+      { name: "Samsung Galaxy Flip", img: "https://i.ibb.co/FLDTY6Hq/Samsung-Galaxy-Transparent.png" },
+    ];
+    const simIcon = "https://i.ibb.co/MkJd0m4Y/pngtree-sim-card-png-image-6059385.png";
+    // ==== RENDER PHONES ====
+    const phoneGrid = document.getElementById('phoneGrid');
+    let selectedPhones = [];
+    let favorites = [];
+    function renderPhones(list=phones) {
+      phoneGrid.innerHTML = "";
+      list.forEach((phone, i) => {
+        const isSelected = selectedPhones.includes(i);
+        const isFav = favorites.includes(i);
+        const card = document.createElement('div');
+        card.className = 'phone-card' + (isSelected ? ' selected':'');
+        card.tabIndex = 0;
+        // Heart
+        const heart = document.createElement('div');
+        heart.className = 'fav-heart' + (isFav ? ' fav':'');
+        heart.innerHTML = isFav ? '&#10084;&#65039;' : '&#9825;';
+        heart.onclick = e => {
+          e.stopPropagation();
+          if (favorites.includes(i)) {
+            favorites = favorites.filter(f=>f!==i);
+          } else {
+            favorites.push(i);
+          }
+          renderPhones(list);
+        };
+        card.appendChild(heart);
+        // Phone img + SIM in flex-row
+        const imgBlock = document.createElement('div');
+        imgBlock.className = 'phone-img-block';
+        // Phone image
+        const img = document.createElement('img');
+        img.src = phone.img;
+        img.className = 'phone-img';
+        img.alt = phone.name;
+        imgBlock.appendChild(img);
+        // SIM icon
+        const sim = document.createElement('img');
+        sim.src = simIcon;
+        sim.className = 'sim-icon';
+        sim.alt = "SIM card";
+        imgBlock.appendChild(sim);
+        card.appendChild(imgBlock);
+        // Name
+        const title = document.createElement('div');
+        title.className = 'phone-title';
+        title.innerText = 'PHONE BUNDLE';
+        card.appendChild(title);
+        card.onclick = ()=>{
+          if (selectedPhones.includes(i)) {
+            selectedPhones = selectedPhones.filter(idx=>idx!==i);
+          } else if (selectedPhones.length < 2) {
+            selectedPhones.push(i);
+          }
+          renderPhones(list);
+          updateConfirmBtn();
+        };
+        phoneGrid.appendChild(card);
+      });
+      updateConfirmBtn();
+    }
+    renderPhones();
+    // ==== SEARCH ====
+    document.getElementById('searchInput').addEventListener('input', function(){
+      const v = this.value.toLowerCase().trim();
+      renderPhones(
+        phones.map((p,i)=>({...p, i}))
+          .filter(p=>p.name.toLowerCase().includes(v))
+          .map(p=>phones[p.i])
+      );
+    });
+    // ==== CONFIRM BUTTON ====
+    const confirmBtn = document.getElementById('confirmBtn');
+    function updateConfirmBtn(){
+      if(selectedPhones.length > 0){
+        confirmBtn.classList.add('active');
+      } else {
+        confirmBtn.classList.remove('active');
+      }
+    }
+    confirmBtn.addEventListener('click', ()=>{
+      document.getElementById('formModalBg').style.display = "flex";
+      document.body.style.overflow = "hidden";
+    });
+    // ==== FORM MODAL ====
+    const formModalBg = document.getElementById('formModalBg');
+    const orderForm = document.getElementById('orderForm');
+    document.getElementById('closeForm').onclick = ()=>{
+      formModalBg.style.display = "none";
+      document.body.style.overflow = "";
+    };
+    orderForm.onsubmit = function(e){
+      e.preventDefault();
+      formModalBg.style.display = "none";
+      document.body.style.overflow = "";
+      runTruckAnim();
+    };
+    // ==== TRUCK ANIMATION ====
+    function runTruckAnim(){
+      const truckBg = document.getElementById('truckAnimBg');
+      truckBg.style.display = "flex";
+      setTimeout(()=>{
+        truckBg.style.display = "none";
+        launchFireworks();
+      }, 2600);
+    }
+    // ==== FIREWORKS ====
+    function launchFireworks(){
+      const fw = document.getElementById('fireworks-canvas');
+      fw.style.display = "block";
+      fireworkStart();
+      setTimeout(()=>{
+        fw.style.display = "none";
+        fireworkStop();
+        selectedPhones = [];
+        renderPhones();
+      }, 2600);
+    }
+    // ==== FIREWORKS CANVAS ====
+    let fwAnim, particles = [];
+    function fireworkStart() {
+      const canvas = document.getElementById('fireworks-canvas');
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      particles = [];
+      for(let i=0; i<11; ++i) spawnFirework();
+      fwAnim = requestAnimationFrame(fireworkDraw);
+    }
+    function spawnFirework() {
+      const colors = ["#fff","#3577ff","#0ee9a2","#FFD700","#00ffc6","#ff8f00"];
+      const cx = window.innerWidth/2 + (Math.random()-0.5)*140;
+      const cy = window.innerHeight/2 + (Math.random()-0.5)*180;
+      const n = 18+Math.random()*14;
+      for(let j=0;j<n;j++){
+        const a = j*2*Math.PI/n, v=3+Math.random()*2;
+        particles.push({
+          x: cx, y: cy,
+          dx: Math.cos(a)*v, dy: Math.sin(a)*v,
+          color: colors[Math.floor(Math.random()*colors.length)],
+          life: 44+Math.random()*19
+        });
+      }
+    }
+    function fireworkDraw() {
+      const canvas = document.getElementById('fireworks-canvas');
+      const ctx = canvas.getContext('2d');
+      ctx.globalAlpha = 0.26;
+      ctx.fillStyle = "#070a1e";
+      ctx.fillRect(0,0,canvas.width,canvas.height);
+      ctx.globalAlpha = 1;
+      particles.forEach(p=>{
+        ctx.beginPath();
+        ctx.arc(p.x,p.y,3+Math.random()*2,0,2*Math.PI);
+        ctx.fillStyle=p.color;
+        ctx.shadowColor=p.color;
+        ctx.shadowBlur=17;
+        ctx.fill();
+        ctx.shadowBlur=0;
+        p.x+=p.dx; p.y+=p.dy; p.dy+=0.08; p.life--;
+      });
+      particles = particles.filter(p=>p.life>0);
+      if(particles.length>0) fwAnim=requestAnimationFrame(fireworkDraw);
+    }
+    function fireworkStop() {
+      cancelAnimationFrame(fwAnim);
+      const canvas = document.getElementById('fireworks-canvas');
+      if (canvas) {
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+      }
+    }
+    // ==== BOTTOM NAV ====
+    const navBtns = document.querySelectorAll('.nav-btn');
+    navBtns.forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        navBtns.forEach(b=>b.classList.remove('active'));
+        btn.classList.add('active');
+      });
+    });
+    // ==== RESIZE FIREWORKS CANVAS ON ORIENTATION CHANGE ====
+    window.addEventListener("resize", ()=>{
+      const canvas = document.getElementById('fireworks-canvas');
+      if (canvas) {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+    });
+  </script>
+  <!-- TRUCK ANIM BLOCK (out of main for z-index) -->
+  <div class="truck-anim-bg" id="truckAnimBg" style="display:none;">
+    <div class="truck-row">
+      <img class="truck-img" id="truckImg" src="https://i.ibb.co/Q3VHx645/726455.png" alt="truck">
+    </div>
+    <div class="truck-label">Phone and bundle sent!</div>
+  </div>
+</body>
+</html>
