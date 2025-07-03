@@ -6,6 +6,7 @@
   <title>Phone Delivery</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <style>
+    /* Global Reset */
     body, html {
       margin: 0;
       padding: 0;
@@ -34,6 +35,7 @@
       margin-bottom: 20px;
     }
 
+    /* Shake message */
     .shake-message {
       font-size: 1.5rem;
       color: #007bff;
@@ -176,6 +178,7 @@
 <body>
 
   <div class="container">
+    <!-- Stage 1 -->
     <div class="header" id="chooseHeader">Choose Your Phone Bundle</div>
     
     <!-- Shake Message -->
@@ -185,7 +188,7 @@
     <div class="gift-container" id="giftContainer"></div>
 
     <!-- Progress Bar -->
-    <div id="progressBarContainer">
+    <div id="progressBarContainer" style="display: none;">
       <progress id="progressBar" value="0" max="100" style="width: 300px; margin-top: 20px;"></progress>
       <p id="progressText">0%</p>
     </div>
@@ -250,6 +253,7 @@
               giftContainer.style.display = 'none';
               phoneOptions.style.display = 'block'; // Show phone options after 100%
               shakeMessage.style.display = 'none';
+              document.getElementById('progressBarContainer').style.display = 'none'; // Hide progress bar
             }, 1000);
           }
         }
