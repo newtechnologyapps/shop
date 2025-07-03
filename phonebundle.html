@@ -30,18 +30,18 @@
 
     /* Header */
     .header {
-      font-size: 2.5rem;
+      font-size: 2.8rem;
       font-weight: 600;
       text-align: center;
       color: #000;
       margin-bottom: 20px;
+      letter-spacing: 1px;
     }
 
     /* Phone Grid */
     .phone-grid {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
       gap: 15px;
       margin-bottom: 40px;
       width: 100%;
@@ -49,15 +49,15 @@
 
     /* Phone Card */
     .phone-card {
-      background-color: #fff;
-      padding: 15px;
+      background-color: #ffffff;
+      padding: 20px;
       border-radius: 15px;
-      width: 140px;
-      height: 180px;
+      width: 150px;
+      height: 200px;
       text-align: center;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
       cursor: pointer;
-      transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
       border: 3px solid transparent;
       display: flex;
       flex-direction: column;
@@ -70,12 +70,12 @@
 
     .phone-card:hover {
       transform: scale(1.05);
-      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
     }
 
     .phone-img {
-      width: 80px;
-      height: 80px;
+      width: 100px;
+      height: 100px;
       object-fit: contain;
       margin-bottom: 10px;
     }
@@ -92,14 +92,14 @@
       margin-top: 5px;
     }
 
-    /* Button */
+    /* Confirm Button */
     .confirm-btn {
-      padding: 12px 30px;
+      padding: 15px 35px;
       background-color: #0a84ff;
       color: #fff;
       border-radius: 25px;
       border: none;
-      font-size: 1.1rem;
+      font-size: 1.2rem;
       cursor: pointer;
       transition: background-color 0.3s ease;
       margin-top: 20px;
@@ -155,6 +155,17 @@
       border-color: #0a84ff;
     }
 
+    /* Memory Selector */
+    .memory-selector {
+      margin-top: 10px;
+      margin-bottom: 20px;
+      padding: 12px;
+      font-size: 1rem;
+      border-radius: 10px;
+      border: 2px solid #ddd;
+      width: 100%;
+    }
+
     .submit-btn {
       padding: 15px;
       background-color: #0a84ff;
@@ -203,22 +214,6 @@
       display: none;
     }
 
-    /* Falling Phones */
-    .falling-phone {
-      position: absolute;
-      top: -100px;
-      left: 50%;
-      transform: translateX(-50%);
-      animation: fall 2s linear infinite;
-      width: 30px;
-      height: auto;
-    }
-
-    @keyframes fall {
-      0% { top: -100px; }
-      100% { top: 100vh; }
-    }
-
     /* Success Message */
     .centered-text {
       position: absolute;
@@ -256,18 +251,18 @@
     /* Mobile Adjustments */
     @media (max-width: 768px) {
       .phone-card {
-        width: 120px;
-        height: 160px;
+        width: 130px;
+        height: 170px;
         padding: 15px;
       }
 
       .phone-img {
-        width: 80px;
-        height: 80px;
+        width: 90px;
+        height: 90px;
       }
 
       .confirm-btn {
-        padding: 10px 25px;
+        padding: 12px 30px;
         font-size: 1rem;
       }
 
@@ -277,7 +272,7 @@
       }
 
       .modal-title {
-        font-size: 1.3rem;
+        font-size: 1.4rem;
       }
 
       .modal-input {
@@ -329,6 +324,15 @@
       <div class="modal-title">Enter Your Details</div>
       <input type="text" id="nameInput" class="modal-input" placeholder="Your Name" required>
       <input type="text" id="addressInput" class="modal-input" placeholder="Your Address" required>
+      
+      <!-- Memory Selector -->
+      <select class="memory-selector" id="memorySelect">
+        <option value="64GB">64GB</option>
+        <option value="128GB">128GB</option>
+        <option value="256GB">256GB</option>
+        <option value="512GB">512GB</option>
+      </select>
+      
       <button class="submit-btn" id="submitBtn">Submit</button>
     </div>
   </div>
@@ -341,7 +345,7 @@
 
   <div class="centered-text" id="successMessage" style="display: none;">Phone and bundle sent!</div>
   <div class="modal-text" id="modalText">
-    Phone and bundle sent! <span>🎉</span>
+    <img src="https://i.ibb.co/B258QNJW/success-animation.gif" alt="Success Animation" />
   </div>
 
   <canvas id="fireworks-canvas"></canvas>
