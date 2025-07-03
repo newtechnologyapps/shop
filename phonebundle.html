@@ -6,7 +6,7 @@
   <title>Phone Bundle Store</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <style>
-    /* Basic Reset */
+    /* Global Reset */
     body, html {
       margin: 0;
       padding: 0;
@@ -18,7 +18,7 @@
       overflow: hidden;
     }
 
-    /* Container */
+    /* Centered container */
     .container {
       display: flex;
       flex-direction: column;
@@ -35,7 +35,6 @@
       text-align: center;
       color: #000;
       margin-bottom: 20px;
-      letter-spacing: 1px;
     }
 
     /* Phone Grid */
@@ -84,12 +83,6 @@
       font-size: 1rem;
       font-weight: 600;
       color: #333;
-    }
-
-    .sim-icon {
-      width: 30px;
-      height: 20px;
-      margin-top: 5px;
     }
 
     /* Confirm Button */
@@ -155,17 +148,6 @@
       border-color: #0a84ff;
     }
 
-    /* Memory Selector */
-    .memory-selector {
-      margin-top: 10px;
-      margin-bottom: 20px;
-      padding: 12px;
-      font-size: 1rem;
-      border-radius: 10px;
-      border: 2px solid #ddd;
-      width: 100%;
-    }
-
     .submit-btn {
       padding: 15px;
       background-color: #0a84ff;
@@ -182,25 +164,20 @@
       background-color: #007aff;
     }
 
-    /* Truck Animation */
-    .truck-container {
+    /* Gift GIF */
+    .gif-container {
       display: none;
-      position: fixed;
-      top: 50%;
-      left: -250px;
-      transform: translateY(-50%);
-      animation: truckMove 6s linear infinite;
-      z-index: 200;
+      width: 200px;
+      height: 200px;
+      margin-top: 50px;
+      text-align: center;
+      cursor: pointer;
     }
 
-    @keyframes truckMove {
-      0% { left: -250px; }
-      100% { left: 100vw; }
-    }
-
-    .truck-img {
-      width: 220px;
-      height: auto;
+    .gif-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
     }
 
     /* Fireworks Animation */
@@ -272,7 +249,7 @@
       }
 
       .modal-title {
-        font-size: 1.4rem;
+        font-size: 1.3rem;
       }
 
       .modal-input {
@@ -337,15 +314,14 @@
     </div>
   </div>
 
-  <!-- Truck animation -->
-  <div class="truck-container" id="truckContainer">
-    <img class="truck-img" id="truckImg" src="https://i.ibb.co/Q3VHx645/726455.png" alt="Truck">
-    <img class="phone-img" id="phoneInTruck" src="" alt="Phone" style="width: 80px; position: absolute; top: 25%; left: 30%;">
+  <!-- Gift GIF -->
+  <div class="gif-container" id="gifContainer">
+    <img src="https://i.ibb.co/k2sYw1Tb/03-39-03-19-512.webp" alt="Gift Animation" id="giftGif" />
   </div>
 
   <div class="centered-text" id="successMessage" style="display: none;">Phone and bundle sent!</div>
   <div class="modal-text" id="modalText">
-    <img src="https://i.ibb.co/B258QNJW/success-animation.gif" alt="Success Animation" />
+    Phone and bundle sent! <span>🎉</span>
   </div>
 
   <canvas id="fireworks-canvas"></canvas>
@@ -364,8 +340,8 @@
     const confirmBtn = document.getElementById('confirmBtn');
     const formModal = document.getElementById('formModal');
     const submitBtn = document.getElementById('submitBtn');
-    const truckContainer = document.getElementById('truckContainer');
-    const phoneInTruck = document.getElementById('phoneInTruck');
+    const gifContainer = document.getElementById('gifContainer');
+    const giftGif = document.getElementById('giftGif');
     const successMessage = document.getElementById('successMessage');
     const chooseHeader = document.getElementById('chooseHeader');
     const fireworksCanvas = document.getElementById('fireworks-canvas');
@@ -418,25 +394,17 @@
     submitBtn.addEventListener('click', (e) => {
       e.preventDefault();
       formModal.style.display = 'none';
+      gifContainer.style.display = 'block';
+    });
+
+    giftGif.addEventListener('click', () => {
+      gifContainer.style.display = 'none';
       successMessage.style.display = 'block';
       chooseHeader.style.display = 'none';
       phoneGrid.style.display = 'none';
       modalText.style.display = 'block';
-      if (selectedPhones.length > 0) {
-        phoneInTruck.src = phones[selectedPhones[0]].img;
-      }
-      runTruckAnim();
-      createFallingPhones();
       startFireworks();
     });
-
-    function runTruckAnim() {
-      truckContainer.style.display = 'block';
-      setTimeout(() => {
-        truckContainer.style.display = 'none';
-        modalText.style.display = 'none';
-      }, 7000);
-    }
 
     function startFireworks() {
       fireworksCanvas.style.display = 'block';
@@ -482,17 +450,6 @@
 
       setInterval(spawnFirework, 500); // Fireworks every half second
       fireworkDraw();
-    }
-
-    function createFallingPhones() {
-      for (let i = 0; i < 200; i++) {
-        const fallingPhone = document.createElement('img');
-        fallingPhone.src = phones[Math.floor(Math.random() * phones.length)].img;
-        fallingPhone.classList.add('falling-phone');
-        fallingPhone.style.left = `${Math.random() * window.innerWidth}px`; // Random horizontal position
-        fallingPhone.style.animationDuration = `${Math.random() * 2 + 1}s`; // Random fall duration
-        document.body.appendChild(fallingPhone);
-      }
     }
   </script>
 
