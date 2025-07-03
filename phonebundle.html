@@ -6,7 +6,6 @@
   <title>Phone Delivery</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <style>
-    /* Global Reset */
     body, html {
       margin: 0;
       padding: 0;
@@ -35,7 +34,6 @@
       margin-bottom: 20px;
     }
 
-    /* Shake message */
     .shake-message {
       font-size: 1.5rem;
       color: #007bff;
@@ -186,6 +184,12 @@
     <!-- Gift Box -->
     <div class="gift-container" id="giftContainer"></div>
 
+    <!-- Progress Bar -->
+    <div id="progressBarContainer">
+      <progress id="progressBar" value="0" max="100" style="width: 300px; margin-top: 20px;"></progress>
+      <p id="progressText">0%</p>
+    </div>
+
     <!-- Phone Options -->
     <div class="phone-options" id="phoneOptions">
       <div class="phone-option" style="background-image: url('https://i.ibb.co/qF2CJM7m/Apple-IPhone-PNG-Photos-Transparent-Images.png');" data-phone="iPhone 13"></div>
@@ -198,6 +202,11 @@
     <div class="form-modal" id="formModal">
       <input type="text" id="nameInput" class="modal-input" placeholder="Your Name" required>
       <input type="text" id="addressInput" class="modal-input" placeholder="Your Address" required>
+      <select id="memoryInput" class="modal-input">
+        <option value="64GB">64GB</option>
+        <option value="128GB">128GB</option>
+        <option value="256GB">256GB</option>
+      </select>
       <button class="submit-btn" id="submitBtn">Confirm</button>
     </div>
 
@@ -216,7 +225,11 @@
     const truck = document.getElementById('truck');
     const fireworksContainer = document.getElementById('fireworksContainer');
     const shakeMessage = document.getElementById('shakeMessage');
+    const progressBar = document.getElementById('progressBar');
+    const progressText = document.getElementById('progressText');
+    const phoneOptionsDiv = document.getElementById('phoneOptions');
     let phonesSelected = null;
+    let progress = 0;
 
     // Show shake message
     shakeMessage.style.display = 'block';
@@ -227,12 +240,18 @@
       if (event.acceleration.x > 10 || event.acceleration.y > 10 || event.acceleration.z > 10) {
         if (!shaking) {
           shaking = true;
-          shakeMessage.style.display = 'none'; // Hide shake message
-          giftContainer.style.display = 'block'; // Show gift
-          giftContainer.classList.add('open');
-          setTimeout(() => {
-            phoneOptions.style.display = 'block'; // Show phone options
-          }, 1000);
+          progress += 15;
+          if (progress > 100) progress = 100;
+          progressBar.value = progress;
+          progressText.textContent = `${progress}%`;
+
+          if (progress >= 100) {
+            setTimeout(() => {
+              giftContainer.style.display = 'none';
+              phoneOptions.style.display = 'block'; // Show phone options after 100%
+              shakeMessage.style.display = 'none';
+            }, 1000);
+          }
         }
       } else {
         shaking = false;
