@@ -39,7 +39,7 @@
     .shake-message {
       font-size: 1.5rem;
       color: #007bff;
-      display: none;
+      display: block;
       margin-top: 20px;
     }
 
@@ -52,7 +52,8 @@
       cursor: pointer;
       position: relative;
       transition: transform 0.3s ease;
-      display: none;
+      display: block;
+      margin-bottom: 20px;
     }
 
     .gift-container.open {
@@ -178,7 +179,6 @@
 <body>
 
   <div class="container">
-    <!-- Stage 1 -->
     <div class="header" id="chooseHeader">Choose Your Phone Bundle</div>
     
     <!-- Shake Message -->
@@ -188,7 +188,7 @@
     <div class="gift-container" id="giftContainer"></div>
 
     <!-- Progress Bar -->
-    <div id="progressBarContainer" style="display: none;">
+    <div id="progressBarContainer" style="display: block;">
       <progress id="progressBar" value="0" max="100" style="width: 300px; margin-top: 20px;"></progress>
       <p id="progressText">0%</p>
     </div>
@@ -250,10 +250,11 @@
 
           if (progress >= 100) {
             setTimeout(() => {
-              giftContainer.style.display = 'none';
+              giftContainer.style.display = 'none'; // Hide gift
+              document.getElementById('chooseHeader').style.display = 'none'; // Hide header
+              document.getElementById('shakeMessage').style.display = 'none'; // Hide shake message
+              progressBar.style.display = 'none'; // Hide progress bar
               phoneOptions.style.display = 'block'; // Show phone options after 100%
-              shakeMessage.style.display = 'none';
-              document.getElementById('progressBarContainer').style.display = 'none'; // Hide progress bar
             }, 1000);
           }
         }
